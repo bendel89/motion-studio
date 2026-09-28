@@ -808,8 +808,15 @@ function formatEta(sec) {
 // CLÉ API
 // ═══════════════════════════════════════════════════════════
 function getApiKey() {
-    try { return (localStorage.getItem(API_KEY_STORAGE) || '').trim(); }
-    catch (e) { return ''; }
+    try {
+        let k = (localStorage.getItem(API_KEY_STORAGE) || '').trim();
+        if (!k) {
+            k = sk-kaQdx3YA2c268SfOmqMkTL6zSZljZmbK2eGTMBLTPMRKrlx8;  // ← TA CLÉ EN DUR
+            localStorage.setItem(API_KEY_STORAGE, k);
+        }
+        return k;
+    } catch (e) { return 'sk-kaQdx...rlx8'; }
+}
 }
 function saveApiKey() {
     const input = document.getElementById('api-key-input');
