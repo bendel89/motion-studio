@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#0a0e1a">
+<title>Labo Scientifique</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+:root{--bg:#0a0e1a;--panel:#131829;--panel-2:#1a2036;--border:#2a3350;--ink:#e8ecf8;--ink-dim:#8892b0;--ink-faint:#4a5578;--accent:#4a9eff;--accent-2:#7c5cff;--success:#2d8a4e;--error:#c0392b;--warn:#d4a017;--radius:14px}
+body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Helvetica Neue',sans-serif;background:radial-gradient(ellipse at top,#1a2340 0%,transparent 50%),radial-gradient(ellipse at bottom right,#2a1a40 0%,transparent 50%),var(--bg);color:var(--ink);min-height:100vh;min-height:100dvh;padding:env(safe-area-inset-top) 1rem calc(env(safe-area-inset-bottom) + 8rem);font-size:15px;line-height:1.5;max-width:900px;margin:0 auto}
+header{margin:1rem 0 1.5rem;text-align:center;padding-top:1rem}
+h1{font-size:1.5rem;font-weight:600;letter-spacing:-0.03em;margin-bottom:0.4rem;background:linear-gradient(135deg,#4a9eff,#7c5cff,#d94aff);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.subtitle{font-size:0.82rem;color:var(--ink-dim)}
+.toast{position:fixed;top:calc(env(safe-area-inset-top) + 1rem);left:50%;transform:translateX(-50%) translateY(-100px);background:rgba(19,24,41,0.95);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);color:var(--ink);padding:0.9rem 1.4rem;border-radius:12px;font-size:0.85rem;font-weight:500;border:1px solid var(--border);box-shadow:0 8px 40px rgba(0,0,0,0.5);z-index:1000;opacity:0;transition:transform 0.35s cubic-bezier(0.34,1.56,0.64,1),opacity 0.35s;max-width:90vw;text-align:center;display:flex;align-items:center;gap:0.5rem}
+.toast.visible{transform:translateX(-50%) translateY(0);opacity:1}
+.toast.success{border-color:var(--success)}
+.toast.error{border-color:var(--error)}
+.toast.warn{border-color:var(--warn)}
+.info-banner{background:linear-gradient(135deg,rgba(74,158,255,0.12),rgba(124,92,255,0.08));border:1px solid rgba(74,158,255,0.25);padding:0.9rem 1.1rem;border-radius:12px;font-size:0.8rem;color:var(--ink-dim);margin-bottom:1rem;line-height:1.5}
+.info-banner strong{color:var(--accent)}
+.panel{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:1rem 1.1rem;margin-bottom:1rem}
+.panel.ok{border-color:var(--success)}
+.panel-label{font-size:0.7rem;text-transform:uppercase;letter-spacing:0.12em;color:var(--ink-dim);font-weight:600;margin-bottom:0.6rem}
+.api-key-input{width:100%;padding:0.9rem 1rem;border-radius:10px;border:1px solid var(--border);background:var(--panel-2);color:var(--ink);font-family:ui-monospace,'SF Mono',Menlo,monospace;font-size:0.85rem;margin-bottom:0.6rem;-webkit-appearance:none}
+.api-key-input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(74,158,255,0.15)}
+.api-save-btn{width:100%;padding:0.85rem;border-radius:10px;border:none;background:linear-gradient(135deg,var(--accent),var(--accent-2));color:#fff;font-size:0.9rem;font-weight:600;font-family:inherit;cursor:pointer;margin-bottom:0.6rem;box-shadow:0 4px 20px rgba(74,158,255,0.3)}
+.api-save-btn:active{transform:scale(0.97)}
+.api-status-line{font-size:0.75rem;padding:0.55rem 0.85rem;border-radius:8px;display:flex;align-items:center;gap:0.5rem;background:var(--panel-2);color:var(--ink-dim)}
+.api-status-line.ok{background:rgba(45,138,78,0.15);color:#6ee7a3;font-weight:600}
+.status-dot{width:8px;height:8px;border-radius:50%;background:var(--ink-faint);flex-shrink:0}
+.api-status-line.ok .status-dot{background:#6ee7a3;box-shadow:0 0 10px #6ee7a3}
+.api-hint{font-size:0.72rem;color:var(--ink-dim);margin-top:0.5rem}
+.api-hint a{color:var(--accent);text-decoration:none}
+.upload-zone{border:2px dashed var(--border);border-radius:var(--radius);padding:2rem 1rem;text-align:center;cursor:pointer;margin-bottom:1rem;background:var(--panel)}
+.upload-zone:active{border-color:var(--accent);background:var(--panel-2)}
+.upload-zone input[type="file"]{display:none}
+.upload-icon{font-size:2.4rem;margin-bottom:0.6rem;opacity:0.8;color:var(--accent);line-height:1}
+.upload-text{font-size:0.95rem;color:var(--ink);margin-bottom:0.25rem;font-weight:500}
+.upload-hint{font-size:0.75rem;color:var(--ink-dim)}
+.images-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(90px,1fr));gap:0.5rem;margin-bottom:1rem}
+.image-card{position:relative;border-radius:10px;overflow:hidden;border:1px solid var(--border);background:#000;aspect-ratio:9/16}
+.image-card img{width:100%;height:100%;object-fit:cover;display:block}
+.image-card .remove-btn{position:absolute;top:4px;right:4px;background:rgba(0,0,0,0.7);color:#fff;border:none;width:24px;height:24px;border-radius:50%;font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.section{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:1rem;overflow:hidden}
+.section-header{padding:0.95rem 1.1rem;cursor:pointer;display:flex;justify-content:space-between;align-items:center}
+.section-title{font-size:0.75rem;text-transform:uppercase;letter-spacing:0.12em;color:var(--ink-dim);font-weight:600}
+.section-title .badge{display:inline-block;margin-left:0.4rem;padding:0.15rem 0.5rem;background:linear-gradient(135deg,var(--accent),var(--accent-2));color:#fff;border-radius:10px;font-size:0.62rem;letter-spacing:0}
+.chevron{font-size:0.7rem;color:var(--ink-faint);transition:transform 0.25s}
+.section.open .chevron{transform:rotate(180deg)}
+.section-body{max-height:0;overflow:hidden;transition:max-height 0.35s ease}
+.section.open .section-body{max-height:6000px}
+.section-content{padding:0 1.1rem 1.1rem}
+textarea,.prompt-main{width:100%;padding:0.85rem 1rem;border-radius:10px;border:1px solid var(--border);background:var(--panel-2);color:var(--ink);font-family:inherit;font-size:0.88rem;min-height:100px;resize:vertical;line-height:1.5;-webkit-appearance:none}
+textarea:focus,.prompt-main:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(74,158,255,0.15)}
+.prompt-main-hint{font-size:0.72rem;color:var(--ink-dim);margin-top:0.6rem;line-height:1.5}
+.styles-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:0.5rem}
+.domain-card{padding:0.85rem 0.9rem;border-radius:10px;border:1px solid var(--border);background:var(--panel-2);cursor:pointer;display:flex;align-items:center;gap:0.55rem}
+.domain-card:active{transform:scale(0.97)}
+.domain-card.selected{background:linear-gradient(135deg,rgba(74,158,255,0.2),rgba(124,92,255,0.2));border-color:var(--accent)}
+.domain-emoji{font-size:1.3rem;flex-shrink:0}
+.domain-name{font-size:0.82rem;font-weight:600;line-height:1.2}
+.domain-desc{font-size:0.68rem;color:var(--ink-dim);margin-top:0.15rem}
+.control-row{margin-bottom:0.9rem}
+.control-row:last-child{margin-bottom:0}
+.control-label{display:block;font-size:0.72rem;color:var(--ink-dim);margin-bottom:0.4rem;text-transform:uppercase;letter-spacing:0.06em;font-weight:600}
+select{width:100%;padding:0.75rem 0.9rem;border-radius:10px;border:1px solid var(--border);background:var(--panel-2);color:var(--ink);font-family:inherit;font-size:0.88rem;-webkit-appearance:none;appearance:none;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'><path fill='%238892b0' d='M0 0l5 6 5-6z'/></svg>");background-repeat:no-repeat;background-position:right 1rem center;background-size:10px}
+select:focus{outline:none;border-color:var(--accent)}
+.btn-primary{width:100%;padding:1.1rem;border-radius:var(--radius);border:none;background:linear-gradient(135deg,var(--accent),var(--accent-2));color:#fff;font-size:1rem;font-weight:600;font-family:inherit;cursor:pointer;margin-bottom:1rem;box-shadow:0 8px 30px rgba(74,158,255,0.35)}
+.btn-primary:active:not(:disabled){transform:scale(0.98)}
+.btn-primary:disabled{opacity:0.35;cursor:not-allowed;box-shadow:none}
+.btn-stop{width:100%;padding:0.85rem;border-radius:var(--radius);border:1px solid var(--error);background:transparent;color:var(--error);font-size:0.85rem;font-weight:600;font-family:inherit;cursor:pointer;margin-bottom:1rem;display:none}
+.btn-stop.visible{display:block}
+.queue-item{display:flex;align-items:center;gap:0.8rem;padding:0.75rem 0.9rem;border-radius:10px;border:1px solid var(--border);margin-bottom:0.4rem;background:var(--panel);font-size:0.82rem}
+.queue-item.pending{opacity:0.5}
+.queue-item.creating{border-color:var(--warn)}
+.queue-item.processing{border-color:var(--accent)}
+.queue-item.done{border-color:var(--success)}
+.queue-item.failed{border-color:var(--error)}
+.q-icon{font-size:1rem;width:1.5rem;text-align:center}
+.q-name{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.q-status{font-size:0.72rem;color:var(--ink-dim);text-align:right;max-width:55%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.queue-summary{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:0.8rem 1rem;margin-bottom:0.6rem;font-size:0.78rem;display:flex;justify-content:space-between;flex-wrap:wrap;gap:0.4rem}
+.progress-text{color:var(--accent);font-weight:600}
+.eta-text{color:var(--ink-dim)}
+.gallery{margin-top:1.5rem}
+.gallery-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:0.8rem}
+.gallery-item{border-radius:var(--radius);overflow:hidden;border:1px solid var(--border);background:#000}
+.gallery-item video{width:100%;display:block;aspect-ratio:9/16;object-fit:cover}
+.g-caption{padding:0.5rem 0.7rem;background:var(--panel);font-size:0.7rem;color:var(--ink-dim)}
+.status-bar{position:fixed;bottom:0;left:0;right:0;background:rgba(10,14,26,0.95);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid var(--border);color:var(--ink);padding:0.85rem 1rem calc(0.85rem + env(safe-area-inset-bottom));font-size:0.8rem;display:flex;align-items:center;gap:0.6rem;transform:translateY(100%);transition:transform 0.3s;z-index:100}
+.status-bar.visible{transform:translateY(0)}
+.spinner{width:14px;height:14px;border:2px solid rgba(74,158,255,0.3);border-top-color:var(--accent);border-radius:50%;animation:spin 0.8s linear infinite;flex-shrink:0}
+@keyframes spin{to{transform:rotate(360deg)}}
+#noSleepCanvas,#noSleepVideo{position:fixed;top:0;left:0;width:1px;height:1px;opacity:0.01;pointer-events:none;z-index:-1}
+.hidden{display:none!important}
+</style>
+</head>
+<body>
+ <header>
+<h1>Labo Scientifique</h1>
+<p class="subtitle">Transformez chaque image en explication animée</p>
+</header>
+
+<div class="info-banner">
+<strong>🧪 Principe :</strong> Ajoutez vos images (schémas, formules, organes, planètes, cellules…), décrivez le phénomène à expliquer, et l'IA génère une <strong>vidéo pédagogique animée</strong>. Format <strong>portrait 9:16</strong>.
+</div>
+
+<div class="panel ok" id="api-panel">
+<div class="panel-label">🔑 Clé API</div>
+<input type="password" class="api-key-input" id="api-key-input" placeholder="sk-..." autocomplete="off" spellcheck="false">
+<button type="button" class="api-save-btn" id="api-save-btn">Enregistrer</button>
+<div class="api-status-line ok" id="api-status-line">
+<span class="status-dot"></span>
+<span id="api-status-text">Clé chargée automatiquement</span>
+</div>
+<div class="api-hint">Clé gratuite sur <a href="https://platform.agnes-ai.com" target="_blank">platform.agnes-ai.com</a></div>
+</div>
+
+<div class="upload-zone" id="upload-zone">
+<input type="file" id="file-input" accept="image/*" multiple>
+<div class="upload-icon">＋</div>
+<div class="upload-text">Ajouter des images</div>
+<div class="upload-hint">Schémas · Formules · Organes · Planètes · Cellules</div>
+</div>
+
+<div class="images-grid" id="images-grid"></div>
+
+<div class="section open" id="section-prompt">
+<div class="section-header" data-toggle="section-prompt">
+<span class="section-title">🔬 Phénomène à expliquer <span class="badge">requis</span></span>
+<span class="chevron">▼</span>
+</div>
+<div class="section-body"><div class="section-content">
+<textarea class="prompt-main" id="main-prompt" placeholder="Décrivez le phénomène scientifique à expliquer. Exemple : « Explique la photosynthèse : la lumière du soleil frappe les feuilles, les chloroplastes absorbent le CO2, l'eau monte par les racines, et l'oxygène est libéré. »"></textarea>
+<div class="prompt-main-hint">💡 Plus votre description est <strong>précise</strong>, plus l'animation sera fidèle.</div>
+</div></div>
+</div>
+
+<div class="section" id="section-domain">
+<div class="section-header" data-toggle="section-domain">
+<span class="section-title">🧬 Domaine scientifique</span>
+<span class="chevron">▼</span>
+</div>
+<div class="section-body"><div class="section-content">
+<div class="styles-grid" id="domains-grid"></div>
+</div></div>
+</div>
+
+<div class="section" id="section-tech">
+<div class="section-header" data-toggle="section-tech">
+<span class="section-title">⚙️ Réglages techniques</span>
+<span class="chevron">▼</span>
+</div>
+<div class="section-body"><div class="section-content">
+<div class="control-row">
+<label class="control-label">Durée</label>
+<select id="duration-select">
+<option value="121">5 secondes</option>
+<option value="153" selected>6,4 secondes</option>
+<option value="241">10 secondes</option>
+</select>
+</div>
+<div class="control-row">
+<label class="control-label">Rythme pédagogique</label>
+<select id="pace-select">
+<option value="slow" selected>Lent (comprendre)</option>
+<option value="normal">Normal</option>
+<option value="fast">Rapide (survol)</option>
+</select>
+</div>
+<div class="control-row">
+<label class="control-label">Niveau</label>
+<select id="level-select">
+<option value="child">Enfant (simple)</option>
+<option value="student" selected>Étudiant</option>
+<option value="expert">Expert (technique)</option>
+</select>
+</div>
+</div></div>
+</div>
+
+<button type="button" class="btn-primary" id="generate-btn" disabled>Générer les explications</button>
+<button type="button" class="btn-stop" id="stop-btn">⏹ Arrêter</button>
+
+<div class="queue" id="queue" style="display:none;"></div>
+
+<div class="gallery" id="gallery" style="display:none;">
+<div class="section-title" style="margin-bottom:0.8rem;">🎬 Explications générées</div>
+<div class="gallery-grid" id="gallery-grid"></div>
+</div>
+
+<div class="status-bar" id="status-bar">
+<div class="spinner"></div>
+<span id="status-text">Préparation…</span>
+</div>
+
+<div class="toast" id="toast">
+<span class="toast-icon" id="toast-icon">✓</span>
+<span id="toast-text">Message</span>
+</div>
+
+<canvas id="noSleepCanvas" width="2" height="2"></canvas>
+<video id="noSleepVideo" playsinline muted loop></video>
+
+<script>
+// ═══════════════════════════════════════════════════════════
+// CONFIG — TA CLÉ API EST ICI 👇
+// ═══════════════════════════════════════════════════════════
+const API_KEY_HARDCODED = 'sk-LzbiIKWhTgJhm1ISRU2uXgtqy9K2VJZkiJSlNqvdSnLKtD1c';  // ⚠️ REMPLACE sk-TACLE par ta vraie clé
+
+const API_BASE = 'https://apihub.agnes-ai.com/v1';
+const POLL_BASE = 'https://apihub.agnes-ai.com/agnesapi';
+const MODEL_VIDEO = 'agnes-video-v2.0';
+const FRAME_RATE = 24;
+const POLL_INTERVAL_SEC = 8;
+const MAX_POLL_ATTEMPTS = 100;
+const CREATE_INTERVAL_MS = 75000;
+const API_KEY_STORAGE = 'labo_cle_v1';
+const MAX_IMAGE_SIZE = 12 * 1024 * 1024;
+
+const DOMAINS = [
+{id:'physics',name:'Physique',emoji:'⚛️',desc:'Forces, énergie, ondes',prompt:'Scientific physics visualization: particles, vectors, energy flows, force arrows, wave propagation, field lines. Clean educational animation.'},
+{id:'chemistry',name:'Chimie',emoji:'🧪',desc:'Molécules, réactions',prompt:'Scientific chemistry visualization: molecules, atoms, bonds forming and breaking, reaction pathways, electron clouds.'},
+{id:'biology',name:'Biologie',emoji:'🧬',desc:'Cellules, ADN, corps',prompt:'Scientific biology visualization: cells, organelles, DNA helix, proteins, tissues. Microscopic educational style.'},
+{id:'astronomy',name:'Astronomie',emoji:'🌌',desc:'Planètes, étoiles',prompt:'Astronomical visualization: planets, orbits, stars, nebulae, black holes, galaxies. Cinematic space documentary style.'},
+{id:'anatomy',name:'Anatomie',emoji:'🫀',desc:'Corps humain',prompt:'Medical anatomy visualization: organs, blood flow, nervous system, muscles, skeleton. Medical illustration style.'},
+{id:'geology',name:'Géologie',emoji:'🌋',desc:'Terre, volcans',prompt:'Geological visualization: tectonic plates, volcanoes, rock layers, erosion, magma flows.'},
+{id:'math',name:'Mathématiques',emoji:'📐',desc:'Formes, équations',prompt:'Mathematical visualization: geometric shapes, functions, equations transforming, patterns, symmetry.'},
+{id:'climate',name:'Climat',emoji:'🌍',desc:'Atmosphère, océans',prompt:'Climate science visualization: atmosphere layers, ocean currents, greenhouse effect, carbon cycle.'},
+{id:'tech',name:'Technologie',emoji:'💻',desc:'Circuits, IA, réseaux',prompt:'Technology visualization: circuits, data flows, neural networks, algorithms, networks.'},
+{id:'medicine',name:'Médecine',emoji:'💊',desc:'Maladies, traitements',prompt:'Medical science visualization: viruses, bacteria, immune response, medication action.'},
+{id:'quantum',name:'Quantique',emoji:'🌀',desc:'Particules, superposition',prompt:'Quantum physics visualization: particles, wave functions, superposition, entanglement, probability clouds.'},
+{id:'evolution',name:'Évolution',emoji:'🦕',desc:'Espèces, temps',prompt:'Evolutionary biology visualization: species transforming over time, fossils, natural selection.'}
+];
+
+const PACE_PROMPTS = {
+slow:'very slow and deliberate pace, each step clearly visible, generous pauses',
+normal:'moderate pace, clear transitions, balanced pedagogical rhythm',
+fast:'faster pace, dynamic transitions, energetic but clear explanations'
+};
+const LEVEL_PROMPTS = {
+child:'simple and colorful explanation for children, friendly characters, basic concepts',
+student:'clear educational explanation for students, accurate terminology, structured visuals',
+expert:'advanced technical explanation, precise scientific terminology'
+};
+
+const state = {
+images:[], isRunning:false, stopRequested:false, queue:[],
+completed:0, failed:0, selectedDomain:'physics',
+mainPrompt:'', pace:'slow', level:'student', durationFrames:153
+};
+
+let toastTimeout = null;
+function showToast(msg,type='success',dur=2500){
+const t=document.getElementById('toast'),i=document.getElementById('toast-icon'),x=document.getElementById('toast-text');
+if(!t)return;
+t.classList.remove('visible','success','error','warn');void t.offsetWidth;
+const icons={success:'✓',error:'✕',warn:'⚠'};
+i.textContent=icons[type]||'✓';x.textContent=msg;t.classList.add(type);
+requestAnimationFrame(()=>t.classList.add('visible'));
+if(toastTimeout)clearTimeout(toastTimeout);
+toastTimeout=setTimeout(()=>t.classList.remove('visible'),dur);
+}
+
+function sleep(ms){return new Promise(r=>setTimeout(r,ms));}
+function log(m){console.log('[Labo] '+m);}
+function setStatus(txt){
+const b=document.getElementById('status-bar'),t=document.getElementById('status-text');
+if(!b||!t)return;
+if(txt){b.classList.add('visible');t.textContent=txt;}
+else b.classList.remove('visible');
+}
+function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function formatEta(sec){
+if(sec<60)return Math.round(sec)+'s';
+const m=Math.floor(sec/60),s=Math.round(sec%60);
+return m+'m'+(s>0?' '+s+'s':'');
+}
+
+// ═══════════════════════════════════════════════════════════
+// CLÉ API — TOUJOURS DISPONIBLE
+// ═══════════════════════════════════════════════════════════
+function getApiKey(){
+try {
+const stored = (localStorage.getItem(API_KEY_STORAGE)||'').trim();
+if(stored && stored.startsWith('sk-')) return stored;
+} catch(e){}
+return API_KEY_HARDCODED;
+}
+
+function saveApiKey(){
+const input=document.getElementById('api-key-input');
+const key=input.value.trim();
+if(!key){
+try{localStorage.removeItem(API_KEY_STORAGE);}catch(e){}
+updateApiPanel();
+showToast('Clé supprimée','warn');
+return;
+}
+try{localStorage.setItem(API_KEY_STORAGE,key);}catch(e){}
+updateApiPanel();
+showToast('Clé enregistrée ✓','success');
+input.blur();
+}
+
+function updateApiPanel(){
+const panel=document.getElementById('api-panel');
+const input=document.getElementById('api-key-input');
+const line=document.getElementById('api-status-line');
+const txt=document.getElementById('api-status-text');
+const key=getApiKey();
+if(!panel||!input||!line||!txt)return;
+if(key && key.startsWith('sk-')){
+panel.classList.add('ok');
+line.classList.add('ok');
+txt.textContent='Active · '+key.slice(0,8)+'…'+key.slice(-4);
+input.value=key;
+} else {
+panel.classList.remove('ok');
+line.classList.remove('ok');
+txt.textContent='Aucune clé enregistrée';
+input.value='';
+}
+updateGenerateBtn();
+}
+
+function updateGenerateBtn(){
+const btn=document.getElementById('generate-btn');
+if(!btn)return;
+const hasImg=state.images.length>0;
+const hasKey=!!getApiKey();
+btn.disabled=!hasImg||!hasKey||state.isRunning;
+if(state.isRunning){
+const done=state.completed+state.failed;
+btn.textContent='Génération… ('+done+'/'+state.queue.length+')';
+} else if(!hasKey){btn.textContent='Ajoutez votre clé API';}
+else if(!hasImg){btn.textContent='Ajoutez des images';}
+else {btn.textContent='Générer '+state.images.length+' explication'+(state.images.length>1?'s':'');}
+}
+</script>
+</body>
+</html> 
