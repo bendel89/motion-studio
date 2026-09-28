@@ -2,344 +2,533 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="theme-color" content="#0a0e1a">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <title>Labo Scientifique</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-:root{--bg:#0a0e1a;--panel:#131829;--panel-2:#1a2036;--border:#2a3350;--ink:#e8ecf8;--ink-dim:#8892b0;--ink-faint:#4a5578;--accent:#4a9eff;--accent-2:#7c5cff;--success:#2d8a4e;--error:#c0392b;--warn:#d4a017;--radius:14px}
-body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Helvetica Neue',sans-serif;background:radial-gradient(ellipse at top,#1a2340 0%,transparent 50%),radial-gradient(ellipse at bottom right,#2a1a40 0%,transparent 50%),var(--bg);color:var(--ink);min-height:100vh;min-height:100dvh;padding:env(safe-area-inset-top) 1rem calc(env(safe-area-inset-bottom) + 8rem);font-size:15px;line-height:1.5;max-width:900px;margin:0 auto}
-header{margin:1rem 0 1.5rem;text-align:center;padding-top:1rem}
-h1{font-size:1.5rem;font-weight:600;letter-spacing:-0.03em;margin-bottom:0.4rem;background:linear-gradient(135deg,#4a9eff,#7c5cff,#d94aff);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
-.subtitle{font-size:0.82rem;color:var(--ink-dim)}
-.toast{position:fixed;top:calc(env(safe-area-inset-top) + 1rem);left:50%;transform:translateX(-50%) translateY(-100px);background:rgba(19,24,41,0.95);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);color:var(--ink);padding:0.9rem 1.4rem;border-radius:12px;font-size:0.85rem;font-weight:500;border:1px solid var(--border);box-shadow:0 8px 40px rgba(0,0,0,0.5);z-index:1000;opacity:0;transition:transform 0.35s cubic-bezier(0.34,1.56,0.64,1),opacity 0.35s;max-width:90vw;text-align:center;display:flex;align-items:center;gap:0.5rem}
-.toast.visible{transform:translateX(-50%) translateY(0);opacity:1}
-.toast.success{border-color:var(--success)}
-.toast.error{border-color:var(--error)}
-.toast.warn{border-color:var(--warn)}
-.info-banner{background:linear-gradient(135deg,rgba(74,158,255,0.12),rgba(124,92,255,0.08));border:1px solid rgba(74,158,255,0.25);padding:0.9rem 1.1rem;border-radius:12px;font-size:0.8rem;color:var(--ink-dim);margin-bottom:1rem;line-height:1.5}
-.info-banner strong{color:var(--accent)}
-.panel{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:1rem 1.1rem;margin-bottom:1rem}
-.panel.ok{border-color:var(--success)}
-.panel-label{font-size:0.7rem;text-transform:uppercase;letter-spacing:0.12em;color:var(--ink-dim);font-weight:600;margin-bottom:0.6rem}
-.api-key-input{width:100%;padding:0.9rem 1rem;border-radius:10px;border:1px solid var(--border);background:var(--panel-2);color:var(--ink);font-family:ui-monospace,'SF Mono',Menlo,monospace;font-size:0.85rem;margin-bottom:0.6rem;-webkit-appearance:none}
-.api-key-input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(74,158,255,0.15)}
-.api-save-btn{width:100%;padding:0.85rem;border-radius:10px;border:none;background:linear-gradient(135deg,var(--accent),var(--accent-2));color:#fff;font-size:0.9rem;font-weight:600;font-family:inherit;cursor:pointer;margin-bottom:0.6rem;box-shadow:0 4px 20px rgba(74,158,255,0.3)}
-.api-save-btn:active{transform:scale(0.97)}
-.api-status-line{font-size:0.75rem;padding:0.55rem 0.85rem;border-radius:8px;display:flex;align-items:center;gap:0.5rem;background:var(--panel-2);color:var(--ink-dim)}
-.api-status-line.ok{background:rgba(45,138,78,0.15);color:#6ee7a3;font-weight:600}
-.status-dot{width:8px;height:8px;border-radius:50%;background:var(--ink-faint);flex-shrink:0}
-.api-status-line.ok .status-dot{background:#6ee7a3;box-shadow:0 0 10px #6ee7a3}
-.api-hint{font-size:0.72rem;color:var(--ink-dim);margin-top:0.5rem}
-.api-hint a{color:var(--accent);text-decoration:none}
-.upload-zone{border:2px dashed var(--border);border-radius:var(--radius);padding:2rem 1rem;text-align:center;cursor:pointer;margin-bottom:1rem;background:var(--panel)}
-.upload-zone:active{border-color:var(--accent);background:var(--panel-2)}
-.upload-zone input[type="file"]{display:none}
-.upload-icon{font-size:2.4rem;margin-bottom:0.6rem;opacity:0.8;color:var(--accent);line-height:1}
-.upload-text{font-size:0.95rem;color:var(--ink);margin-bottom:0.25rem;font-weight:500}
-.upload-hint{font-size:0.75rem;color:var(--ink-dim)}
-.images-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(90px,1fr));gap:0.5rem;margin-bottom:1rem}
-.image-card{position:relative;border-radius:10px;overflow:hidden;border:1px solid var(--border);background:#000;aspect-ratio:9/16}
-.image-card img{width:100%;height:100%;object-fit:cover;display:block}
-.image-card .remove-btn{position:absolute;top:4px;right:4px;background:rgba(0,0,0,0.7);color:#fff;border:none;width:24px;height:24px;border-radius:50%;font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center}
-.section{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:1rem;overflow:hidden}
-.section-header{padding:0.95rem 1.1rem;cursor:pointer;display:flex;justify-content:space-between;align-items:center}
-.section-title{font-size:0.75rem;text-transform:uppercase;letter-spacing:0.12em;color:var(--ink-dim);font-weight:600}
-.section-title .badge{display:inline-block;margin-left:0.4rem;padding:0.15rem 0.5rem;background:linear-gradient(135deg,var(--accent),var(--accent-2));color:#fff;border-radius:10px;font-size:0.62rem;letter-spacing:0}
-.chevron{font-size:0.7rem;color:var(--ink-faint);transition:transform 0.25s}
-.section.open .chevron{transform:rotate(180deg)}
-.section-body{max-height:0;overflow:hidden;transition:max-height 0.35s ease}
-.section.open .section-body{max-height:6000px}
-.section-content{padding:0 1.1rem 1.1rem}
-textarea,.prompt-main{width:100%;padding:0.85rem 1rem;border-radius:10px;border:1px solid var(--border);background:var(--panel-2);color:var(--ink);font-family:inherit;font-size:0.88rem;min-height:100px;resize:vertical;line-height:1.5;-webkit-appearance:none}
-textarea:focus,.prompt-main:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(74,158,255,0.15)}
-.prompt-main-hint{font-size:0.72rem;color:var(--ink-dim);margin-top:0.6rem;line-height:1.5}
-.styles-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:0.5rem}
-.domain-card{padding:0.85rem 0.9rem;border-radius:10px;border:1px solid var(--border);background:var(--panel-2);cursor:pointer;display:flex;align-items:center;gap:0.55rem}
-.domain-card:active{transform:scale(0.97)}
-.domain-card.selected{background:linear-gradient(135deg,rgba(74,158,255,0.2),rgba(124,92,255,0.2));border-color:var(--accent)}
-.domain-emoji{font-size:1.3rem;flex-shrink:0}
-.domain-name{font-size:0.82rem;font-weight:600;line-height:1.2}
-.domain-desc{font-size:0.68rem;color:var(--ink-dim);margin-top:0.15rem}
-.control-row{margin-bottom:0.9rem}
-.control-row:last-child{margin-bottom:0}
-.control-label{display:block;font-size:0.72rem;color:var(--ink-dim);margin-bottom:0.4rem;text-transform:uppercase;letter-spacing:0.06em;font-weight:600}
-select{width:100%;padding:0.75rem 0.9rem;border-radius:10px;border:1px solid var(--border);background:var(--panel-2);color:var(--ink);font-family:inherit;font-size:0.88rem;-webkit-appearance:none;appearance:none;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'><path fill='%238892b0' d='M0 0l5 6 5-6z'/></svg>");background-repeat:no-repeat;background-position:right 1rem center;background-size:10px}
-select:focus{outline:none;border-color:var(--accent)}
-.btn-primary{width:100%;padding:1.1rem;border-radius:var(--radius);border:none;background:linear-gradient(135deg,var(--accent),var(--accent-2));color:#fff;font-size:1rem;font-weight:600;font-family:inherit;cursor:pointer;margin-bottom:1rem;box-shadow:0 8px 30px rgba(74,158,255,0.35)}
-.btn-primary:active:not(:disabled){transform:scale(0.98)}
-.btn-primary:disabled{opacity:0.35;cursor:not-allowed;box-shadow:none}
-.btn-stop{width:100%;padding:0.85rem;border-radius:var(--radius);border:1px solid var(--error);background:transparent;color:var(--error);font-size:0.85rem;font-weight:600;font-family:inherit;cursor:pointer;margin-bottom:1rem;display:none}
-.btn-stop.visible{display:block}
-.queue-item{display:flex;align-items:center;gap:0.8rem;padding:0.75rem 0.9rem;border-radius:10px;border:1px solid var(--border);margin-bottom:0.4rem;background:var(--panel);font-size:0.82rem}
-.queue-item.pending{opacity:0.5}
-.queue-item.creating{border-color:var(--warn)}
-.queue-item.processing{border-color:var(--accent)}
-.queue-item.done{border-color:var(--success)}
-.queue-item.failed{border-color:var(--error)}
-.q-icon{font-size:1rem;width:1.5rem;text-align:center}
-.q-name{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.q-status{font-size:0.72rem;color:var(--ink-dim);text-align:right;max-width:55%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.queue-summary{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:0.8rem 1rem;margin-bottom:0.6rem;font-size:0.78rem;display:flex;justify-content:space-between;flex-wrap:wrap;gap:0.4rem}
-.progress-text{color:var(--accent);font-weight:600}
-.eta-text{color:var(--ink-dim)}
-.gallery{margin-top:1.5rem}
-.gallery-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:0.8rem}
-.gallery-item{border-radius:var(--radius);overflow:hidden;border:1px solid var(--border);background:#000}
-.gallery-item video{width:100%;display:block;aspect-ratio:9/16;object-fit:cover}
-.g-caption{padding:0.5rem 0.7rem;background:var(--panel);font-size:0.7rem;color:var(--ink-dim)}
-.status-bar{position:fixed;bottom:0;left:0;right:0;background:rgba(10,14,26,0.95);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid var(--border);color:var(--ink);padding:0.85rem 1rem calc(0.85rem + env(safe-area-inset-bottom));font-size:0.8rem;display:flex;align-items:center;gap:0.6rem;transform:translateY(100%);transition:transform 0.3s;z-index:100}
-.status-bar.visible{transform:translateY(0)}
-.spinner{width:14px;height:14px;border:2px solid rgba(74,158,255,0.3);border-top-color:var(--accent);border-radius:50%;animation:spin 0.8s linear infinite;flex-shrink:0}
+body{font-family:-apple-system,sans-serif;background:#0a0e1a;color:#e8ecf8;min-height:100vh;padding:1rem 1rem 6rem;font-size:15px;line-height:1.5;max-width:900px;margin:0 auto}
+h1{text-align:center;font-size:1.4rem;margin-bottom:0.3rem;background:linear-gradient(135deg,#4a9eff,#7c5cff);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.sub{text-align:center;font-size:0.8rem;color:#8892b0;margin-bottom:1rem}
+.info{background:rgba(74,158,255,0.12);border:1px solid rgba(74,158,255,0.25);padding:0.9rem;border-radius:10px;font-size:0.8rem;color:#8892b0;margin-bottom:1rem;line-height:1.5}
+.info strong{color:#4a9eff}
+.panel{background:#131829;border:1px solid #2a3350;border-radius:12px;padding:1rem;margin-bottom:1rem}
+.panel.ok{border-color:#2d8a4e}
+.lbl{font-size:0.7rem;color:#8892b0;text-transform:uppercase;letter-spacing:0.1em;font-weight:600;margin-bottom:0.6rem}
+input[type=password]{width:100%;padding:0.9rem;border-radius:10px;border:1px solid #2a3350;background:#1a2036;color:#e8ecf8;font-family:monospace;font-size:0.85rem;margin-bottom:0.6rem}
+button.primary{width:100%;padding:0.85rem;border-radius:10px;border:none;background:linear-gradient(135deg,#4a9eff,#7c5cff);color:#fff;font-size:0.9rem;font-weight:600;cursor:pointer;margin-bottom:0.6rem}
+button.primary:active{opacity:0.8}
+.status{font-size:0.75rem;padding:0.55rem 0.85rem;border-radius:8px;display:flex;align-items:center;gap:0.5rem;background:#1a2036;color:#8892b0}
+.status.ok{background:rgba(45,138,78,0.15);color:#6ee7a3;font-weight:600}
+.dot{width:8px;height:8px;border-radius:50%;background:#4a5578;flex-shrink:0}
+.status.ok .dot{background:#6ee7a3}
+.hint{font-size:0.72rem;color:#8892b0;margin-top:0.5rem}
+.hint a{color:#4a9eff}
+.upload{border:2px dashed #2a3350;border-radius:12px;padding:2rem 1rem;text-align:center;cursor:pointer;margin-bottom:1rem;background:#131829}
+.upload:active{border-color:#4a9eff}
+.upload input{display:none}
+.up-icon{font-size:2.4rem;color:#4a9eff;line-height:1;margin-bottom:0.5rem}
+.up-text{font-size:0.95rem;color:#e8ecf8;font-weight:500}
+.up-hint{font-size:0.75rem;color:#8892b0;margin-top:0.2rem}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(90px,1fr));gap:0.5rem;margin-bottom:1rem}
+.card{position:relative;border-radius:10px;overflow:hidden;border:1px solid #2a3350;background:#000;aspect-ratio:9/16}
+.card img{width:100%;height:100%;object-fit:cover;display:block}
+.card .rm{position:absolute;top:4px;right:4px;background:rgba(0,0,0,0.7);color:#fff;border:none;width:24px;height:24px;border-radius:50%;font-size:12px;cursor:pointer}
+.sec{background:#131829;border:1px solid #2a3350;border-radius:12px;margin-bottom:1rem;overflow:hidden}
+.sec-h{padding:0.95rem 1.1rem;cursor:pointer;display:flex;justify-content:space-between;align-items:center}
+.sec-t{font-size:0.75rem;text-transform:uppercase;letter-spacing:0.1em;color:#8892b0;font-weight:600}
+.sec-t .b{display:inline-block;margin-left:0.4rem;padding:0.15rem 0.5rem;background:linear-gradient(135deg,#4a9eff,#7c5cff);color:#fff;border-radius:10px;font-size:0.62rem}
+.chev{font-size:0.7rem;color:#4a5578;transition:transform 0.25s}
+.sec.open .chev{transform:rotate(180deg)}
+.sec-b{max-height:0;overflow:hidden;transition:max-height 0.35s ease}
+.sec.open .sec-b{max-height:5000px}
+.sec-c{padding:0 1.1rem 1.1rem}
+textarea{width:100%;padding:0.85rem;border-radius:10px;border:1px solid #2a3350;background:#1a2036;color:#e8ecf8;font-family:inherit;font-size:0.88rem;min-height:100px;resize:vertical;line-height:1.5}
+textarea:focus{outline:none;border-color:#4a9eff}
+.dgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:0.5rem}
+.dcard{padding:0.85rem 0.9rem;border-radius:10px;border:1px solid #2a3350;background:#1a2036;cursor:pointer;display:flex;align-items:center;gap:0.55rem}
+.dcard.sel{background:linear-gradient(135deg,rgba(74,158,255,0.2),rgba(124,92,255,0.2));border-color:#4a9eff}
+.dem{font-size:1.3rem;flex-shrink:0}
+.dnm{font-size:0.82rem;font-weight:600}
+.dds{font-size:0.68rem;color:#8892b0;margin-top:0.15rem}
+.cr{margin-bottom:0.9rem}
+.cl{display:block;font-size:0.72rem;color:#8892b0;margin-bottom:0.4rem;text-transform:uppercase;letter-spacing:0.06em;font-weight:600}
+select{width:100%;padding:0.75rem;border-radius:10px;border:1px solid #2a3350;background:#1a2036;color:#e8ecf8;font-size:0.88rem;-webkit-appearance:none}
+select:focus{outline:none;border-color:#4a9eff}
+.gen{width:100%;padding:1.1rem;border-radius:12px;border:none;background:linear-gradient(135deg,#4a9eff,#7c5cff);color:#fff;font-size:1rem;font-weight:600;cursor:pointer;margin-bottom:1rem}
+.gen:disabled{opacity:0.35;cursor:not-allowed}
+.stop{width:100%;padding:0.85rem;border-radius:12px;border:1px solid #c0392b;background:transparent;color:#c0392b;font-size:0.85rem;font-weight:600;cursor:pointer;margin-bottom:1rem;display:none}
+.stop.show{display:block}
+.q{margin-top:1rem}
+.qi{display:flex;align-items:center;gap:0.8rem;padding:0.75rem;border-radius:10px;border:1px solid #2a3350;margin-bottom:0.4rem;background:#131829;font-size:0.82rem}
+.qi.pending{opacity:0.5}
+.qi.processing{border-color:#4a9eff}
+.qi.done{border-color:#2d8a4e}
+.qi.failed{border-color:#c0392b}
+.qic{font-size:1rem;width:1.5rem;text-align:center}
+.qnm{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.qst{font-size:0.72rem;color:#8892b0;text-align:right;max-width:55%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.gal{margin-top:1.5rem}
+.gg{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:0.8rem}
+.gi{border-radius:12px;overflow:hidden;border:1px solid #2a3350;background:#000}
+.gi video{width:100%;display:block;aspect-ratio:9/16;object-fit:cover}
+.gc{padding:0.5rem;background:#131829;font-size:0.7rem;color:#8892b0}
+.sb{position:fixed;bottom:0;left:0;right:0;background:rgba(10,14,26,0.95);color:#fff;padding:0.85rem 1rem;font-size:0.8rem;display:flex;align-items:center;gap:0.6rem;transform:translateY(100%);transition:transform 0.3s;z-index:100}
+.sb.show{transform:translateY(0)}
+.sp{width:14px;height:14px;border:2px solid rgba(74,158,255,0.3);border-top-color:#4a9eff;border-radius:50%;animation:spin 0.8s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
-#noSleepCanvas,#noSleepVideo{position:fixed;top:0;left:0;width:1px;height:1px;opacity:0.01;pointer-events:none;z-index:-1}
-.hidden{display:none!important}
+.ts{position:fixed;top:1rem;left:50%;transform:translateX(-50%) translateY(-100px);background:#131829;color:#fff;padding:0.9rem 1.4rem;border-radius:12px;font-size:0.85rem;border:1px solid #2a3350;z-index:1000;opacity:0;transition:all 0.35s}
+.ts.show{transform:translateX(-50%) translateY(0);opacity:1}
+.ts.success{border-color:#2d8a4e}
+.ts.error{border-color:#c0392b}
+.ts.warn{border-color:#d4a017}
 </style>
 </head>
 <body>
- <header>
-<h1>Labo Scientifique</h1>
-<p class="subtitle">Transformez chaque image en explication animée</p>
-</header>
+ <h1>Labo Scientifique</h1>
+<p class="sub">Transformez chaque image en explication animée</p>
 
-<div class="info-banner">
-<strong>🧪 Principe :</strong> Ajoutez vos images (schémas, formules, organes, planètes, cellules…), décrivez le phénomène à expliquer, et l'IA génère une <strong>vidéo pédagogique animée</strong>. Format <strong>portrait 9:16</strong>.
+<div class="info">
+<strong>🧪 Principe :</strong> Ajoutez vos images, décrivez le phénomène à expliquer, et l'IA génère une <strong>vidéo pédagogique animée</strong>. Format <strong>portrait 9:16</strong>.
 </div>
 
-<div class="panel ok" id="api-panel">
-<div class="panel-label">🔑 Clé API</div>
-<input type="password" class="api-key-input" id="api-key-input" placeholder="sk-..." autocomplete="off" spellcheck="false">
-<button type="button" class="api-save-btn" id="api-save-btn">Enregistrer</button>
-<div class="api-status-line ok" id="api-status-line">
-<span class="status-dot"></span>
-<span id="api-status-text">Clé chargée automatiquement</span>
+<div class="panel ok" id="apiPanel">
+<div class="lbl">🔑 Clé API</div>
+<input type="password" id="apiKey" placeholder="sk-...">
+<button class="primary" id="saveKey">Enregistrer</button>
+<div class="status ok" id="apiStatus">
+<span class="dot"></span>
+<span id="apiText">Chargement…</span>
 </div>
-<div class="api-hint">Clé gratuite sur <a href="https://platform.agnes-ai.com" target="_blank">platform.agnes-ai.com</a></div>
-</div>
-
-<div class="upload-zone" id="upload-zone">
-<input type="file" id="file-input" accept="image/*" multiple>
-<div class="upload-icon">＋</div>
-<div class="upload-text">Ajouter des images</div>
-<div class="upload-hint">Schémas · Formules · Organes · Planètes · Cellules</div>
+<div class="hint">Clé gratuite sur <a href="https://platform.agnes-ai.com" target="_blank">platform.agnes-ai.com</a></div>
 </div>
 
-<div class="images-grid" id="images-grid"></div>
-
-<div class="section open" id="section-prompt">
-<div class="section-header" data-toggle="section-prompt">
-<span class="section-title">🔬 Phénomène à expliquer <span class="badge">requis</span></span>
-<span class="chevron">▼</span>
+<div class="upload" id="uploadZone">
+<input type="file" id="fileInput" accept="image/*" multiple>
+<div class="up-icon">＋</div>
+<div class="up-text">Ajouter des images</div>
+<div class="up-hint">Schémas · Formules · Organes · Planètes · Cellules</div>
 </div>
-<div class="section-body"><div class="section-content">
-<textarea class="prompt-main" id="main-prompt" placeholder="Décrivez le phénomène scientifique à expliquer. Exemple : « Explique la photosynthèse : la lumière du soleil frappe les feuilles, les chloroplastes absorbent le CO2, l'eau monte par les racines, et l'oxygène est libéré. »"></textarea>
-<div class="prompt-main-hint">💡 Plus votre description est <strong>précise</strong>, plus l'animation sera fidèle.</div>
+
+<div class="grid" id="imgGrid"></div>
+
+<div class="sec open" id="secPrompt">
+<div class="sec-h" data-tog="secPrompt">
+<span class="sec-t">🔬 Phénomène à expliquer <span class="b">requis</span></span>
+<span class="chev">▼</span>
+</div>
+<div class="sec-b"><div class="sec-c">
+<textarea id="prompt" placeholder="Décrivez le phénomène scientifique à expliquer. Exemple : Explique la photosynthèse. La lumière du soleil frappe les feuilles, les chloroplastes absorbent le CO2, l'eau monte par les racines, et l'oxygène est libéré."></textarea>
 </div></div>
 </div>
 
-<div class="section" id="section-domain">
-<div class="section-header" data-toggle="section-domain">
-<span class="section-title">🧬 Domaine scientifique</span>
-<span class="chevron">▼</span>
+<div class="sec" id="secDomain">
+<div class="sec-h" data-tog="secDomain">
+<span class="sec-t">🧬 Domaine scientifique</span>
+<span class="chev">▼</span>
 </div>
-<div class="section-body"><div class="section-content">
-<div class="styles-grid" id="domains-grid"></div>
+<div class="sec-b"><div class="sec-c">
+<div class="dgrid" id="dgrid"></div>
 </div></div>
 </div>
 
-<div class="section" id="section-tech">
-<div class="section-header" data-toggle="section-tech">
-<span class="section-title">⚙️ Réglages techniques</span>
-<span class="chevron">▼</span>
+<div class="sec" id="secTech">
+<div class="sec-h" data-tog="secTech">
+<span class="sec-t">⚙️ Réglages techniques</span>
+<span class="chev">▼</span>
 </div>
-<div class="section-body"><div class="section-content">
-<div class="control-row">
-<label class="control-label">Durée</label>
-<select id="duration-select">
+<div class="sec-b"><div class="sec-c">
+<div class="cr"><label class="cl">Durée</label>
+<select id="selDuration">
 <option value="121">5 secondes</option>
 <option value="153" selected>6,4 secondes</option>
 <option value="241">10 secondes</option>
-</select>
-</div>
-<div class="control-row">
-<label class="control-label">Rythme pédagogique</label>
-<select id="pace-select">
-<option value="slow" selected>Lent (comprendre)</option>
+</select></div>
+<div class="cr"><label class="cl">Rythme pédagogique</label>
+<select id="selPace">
+<option value="slow" selected>Lent</option>
 <option value="normal">Normal</option>
-<option value="fast">Rapide (survol)</option>
-</select>
-</div>
-<div class="control-row">
-<label class="control-label">Niveau</label>
-<select id="level-select">
-<option value="child">Enfant (simple)</option>
+<option value="fast">Rapide</option>
+</select></div>
+<div class="cr"><label class="cl">Niveau</label>
+<select id="selLevel">
+<option value="child">Enfant</option>
 <option value="student" selected>Étudiant</option>
-<option value="expert">Expert (technique)</option>
-</select>
-</div>
+<option value="expert">Expert</option>
+</select></div>
 </div></div>
 </div>
 
-<button type="button" class="btn-primary" id="generate-btn" disabled>Générer les explications</button>
-<button type="button" class="btn-stop" id="stop-btn">⏹ Arrêter</button>
-
-<div class="queue" id="queue" style="display:none;"></div>
-
-<div class="gallery" id="gallery" style="display:none;">
-<div class="section-title" style="margin-bottom:0.8rem;">🎬 Explications générées</div>
-<div class="gallery-grid" id="gallery-grid"></div>
+<button class="gen" id="genBtn" disabled>Générer les explications</button>
+<button class="stop" id="stopBtn">⏹ Arrêter</button>
+<div id="queue"></div>
+<div class="gal" id="gallery" style="display:none">
+<div class="sec-t" style="margin-bottom:0.8rem">🎬 Explications générées</div>
+<div class="gg" id="gg"></div>
 </div>
 
-<div class="status-bar" id="status-bar">
-<div class="spinner"></div>
-<span id="status-text">Préparation…</span>
-</div>
-
-<div class="toast" id="toast">
-<span class="toast-icon" id="toast-icon">✓</span>
-<span id="toast-text">Message</span>
-</div>
-
-<canvas id="noSleepCanvas" width="2" height="2"></canvas>
-<video id="noSleepVideo" playsinline muted loop></video>
-
+<div class="sb" id="statusBar"><div class="sp"></div><span id="statusText">Préparation…</span></div>
+<div class="ts" id="toast"><span id="toastText">Message</span></div>
 <script>
-// ═══════════════════════════════════════════════════════════
-// CONFIG — TA CLÉ API EST ICI 👇
-// ═══════════════════════════════════════════════════════════
-const API_KEY_HARDCODED = 'sk-LzbiIKWhTgJhm1ISRU2uXgtqy9K2VJZkiJSlNqvdSnLKtD1c';  // ⚠️ REMPLACE sk-TACLE par ta vraie clé
+// ═══════════ TA CLÉ API ICI ═══════════
+const API_KEY = 'sk-M00AWyCVwAbxcjJ7cuGHIvsHOEAwds7uj3B9ihV2B2UTU1ee';// 
 
 const API_BASE = 'https://apihub.agnes-ai.com/v1';
 const POLL_BASE = 'https://apihub.agnes-ai.com/agnesapi';
-const MODEL_VIDEO = 'agnes-video-v2.0';
-const FRAME_RATE = 24;
-const POLL_INTERVAL_SEC = 8;
-const MAX_POLL_ATTEMPTS = 100;
-const CREATE_INTERVAL_MS = 75000;
-const API_KEY_STORAGE = 'labo_cle_v1';
-const MAX_IMAGE_SIZE = 12 * 1024 * 1024;
+const MODEL = 'agnes-video-v2.0';
+const FPS = 24;
+const STORAGE_KEY = 'labo_key_v1';
 
 const DOMAINS = [
-{id:'physics',name:'Physique',emoji:'⚛️',desc:'Forces, énergie, ondes',prompt:'Scientific physics visualization: particles, vectors, energy flows, force arrows, wave propagation, field lines. Clean educational animation.'},
-{id:'chemistry',name:'Chimie',emoji:'🧪',desc:'Molécules, réactions',prompt:'Scientific chemistry visualization: molecules, atoms, bonds forming and breaking, reaction pathways, electron clouds.'},
-{id:'biology',name:'Biologie',emoji:'🧬',desc:'Cellules, ADN, corps',prompt:'Scientific biology visualization: cells, organelles, DNA helix, proteins, tissues. Microscopic educational style.'},
-{id:'astronomy',name:'Astronomie',emoji:'🌌',desc:'Planètes, étoiles',prompt:'Astronomical visualization: planets, orbits, stars, nebulae, black holes, galaxies. Cinematic space documentary style.'},
-{id:'anatomy',name:'Anatomie',emoji:'🫀',desc:'Corps humain',prompt:'Medical anatomy visualization: organs, blood flow, nervous system, muscles, skeleton. Medical illustration style.'},
-{id:'geology',name:'Géologie',emoji:'🌋',desc:'Terre, volcans',prompt:'Geological visualization: tectonic plates, volcanoes, rock layers, erosion, magma flows.'},
-{id:'math',name:'Mathématiques',emoji:'📐',desc:'Formes, équations',prompt:'Mathematical visualization: geometric shapes, functions, equations transforming, patterns, symmetry.'},
-{id:'climate',name:'Climat',emoji:'🌍',desc:'Atmosphère, océans',prompt:'Climate science visualization: atmosphere layers, ocean currents, greenhouse effect, carbon cycle.'},
-{id:'tech',name:'Technologie',emoji:'💻',desc:'Circuits, IA, réseaux',prompt:'Technology visualization: circuits, data flows, neural networks, algorithms, networks.'},
-{id:'medicine',name:'Médecine',emoji:'💊',desc:'Maladies, traitements',prompt:'Medical science visualization: viruses, bacteria, immune response, medication action.'},
-{id:'quantum',name:'Quantique',emoji:'🌀',desc:'Particules, superposition',prompt:'Quantum physics visualization: particles, wave functions, superposition, entanglement, probability clouds.'},
-{id:'evolution',name:'Évolution',emoji:'🦕',desc:'Espèces, temps',prompt:'Evolutionary biology visualization: species transforming over time, fossils, natural selection.'}
+{id:'physics',emoji:'⚛️',name:'Physique',desc:'Forces, énergie, ondes',p:'Scientific physics visualization: particles, vectors, energy flows, wave propagation.'},
+{id:'chemistry',emoji:'🧪',name:'Chimie',desc:'Molécules, réactions',p:'Scientific chemistry: molecules, atoms, bonds, reactions, electron clouds.'},
+{id:'biology',emoji:'🧬',name:'Biologie',desc:'Cellules, ADN',p:'Scientific biology: cells, organelles, DNA, proteins, tissues.'},
+{id:'astronomy',emoji:'🌌',name:'Astronomie',desc:'Planètes, étoiles',p:'Astronomical: planets, orbits, stars, nebulae, galaxies.'},
+{id:'anatomy',emoji:'🫀',name:'Anatomie',desc:'Corps humain',p:'Medical anatomy: organs, blood flow, nervous system, muscles.'},
+{id:'geology',emoji:'🌋',name:'Géologie',desc:'Terre, volcans',p:'Geological: tectonic plates, volcanoes, rock layers.'},
+{id:'math',emoji:'📐',name:'Maths',desc:'Formes, équations',p:'Mathematical: geometric shapes, functions, equations, patterns.'},
+{id:'climate',emoji:'🌍',name:'Climat',desc:'Atmosphère, océans',p:'Climate: atmosphere, ocean currents, greenhouse effect.'},
+{id:'tech',emoji:'💻',name:'Technologie',desc:'Circuits, IA',p:'Technology: circuits, data flows, neural networks.'},
+{id:'medicine',emoji:'💊',name:'Médecine',desc:'Maladies',p:'Medical: viruses, bacteria, immune response, medication.'},
+{id:'quantum',emoji:'🌀',name:'Quantique',desc:'Particules',p:'Quantum: particles, wave functions, superposition, entanglement.'},
+{id:'evolution',emoji:'🦕',name:'Évolution',desc:'Espèces',p:'Evolution: species transforming, fossils, natural selection.'}
 ];
 
-const PACE_PROMPTS = {
-slow:'very slow and deliberate pace, each step clearly visible, generous pauses',
-normal:'moderate pace, clear transitions, balanced pedagogical rhythm',
-fast:'faster pace, dynamic transitions, energetic but clear explanations'
-};
-const LEVEL_PROMPTS = {
-child:'simple and colorful explanation for children, friendly characters, basic concepts',
-student:'clear educational explanation for students, accurate terminology, structured visuals',
-expert:'advanced technical explanation, precise scientific terminology'
-};
+const PACES = {slow:'very slow and deliberate pace, generous pauses',normal:'moderate pace',fast:'faster pace, dynamic'};
+const LEVELS = {child:'simple explanation for children',student:'clear educational explanation',expert:'advanced technical explanation'};
 
 const state = {
-images:[], isRunning:false, stopRequested:false, queue:[],
-completed:0, failed:0, selectedDomain:'physics',
-mainPrompt:'', pace:'slow', level:'student', durationFrames:153
+images:[], running:false, stopped:false, queue:[],
+completed:0, failed:0, domain:'physics', prompt:'',
+pace:'slow', level:'student', duration:153
 };
-
-let toastTimeout = null;
-function showToast(msg,type='success',dur=2500){
-const t=document.getElementById('toast'),i=document.getElementById('toast-icon'),x=document.getElementById('toast-text');
-if(!t)return;
-t.classList.remove('visible','success','error','warn');void t.offsetWidth;
-const icons={success:'✓',error:'✕',warn:'⚠'};
-i.textContent=icons[type]||'✓';x.textContent=msg;t.classList.add(type);
-requestAnimationFrame(()=>t.classList.add('visible'));
-if(toastTimeout)clearTimeout(toastTimeout);
-toastTimeout=setTimeout(()=>t.classList.remove('visible'),dur);
-}
-
+</script>
+<script>
+// ═══════════ UTILITAIRES ═══════════
+function $(id){return document.getElementById(id);}
 function sleep(ms){return new Promise(r=>setTimeout(r,ms));}
+function esc(s){return String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
 function log(m){console.log('[Labo] '+m);}
+
+let toastT=null;
+function toast(msg,type){
+type=type||'success';
+const t=$('toast'); if(!t)return;
+t.className='ts';
+void t.offsetWidth;
+t.classList.add(type,'show');
+$('toastText').textContent=msg;
+if(toastT)clearTimeout(toastT);
+toastT=setTimeout(()=>t.classList.remove('show'),2500);
+}
+
 function setStatus(txt){
-const b=document.getElementById('status-bar'),t=document.getElementById('status-text');
+const b=$('statusBar'), t=$('statusText');
 if(!b||!t)return;
-if(txt){b.classList.add('visible');t.textContent=txt;}
-else b.classList.remove('visible');
-}
-function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
-function formatEta(sec){
-if(sec<60)return Math.round(sec)+'s';
-const m=Math.floor(sec/60),s=Math.round(sec%60);
-return m+'m'+(s>0?' '+s+'s':'');
+if(txt){b.classList.add('show');t.textContent=txt;}
+else b.classList.remove('show');
 }
 
-// ═══════════════════════════════════════════════════════════
-// CLÉ API — TOUJOURS DISPONIBLE
-// ═══════════════════════════════════════════════════════════
-function getApiKey(){
-try {
-const stored = (localStorage.getItem(API_KEY_STORAGE)||'').trim();
-if(stored && stored.startsWith('sk-')) return stored;
-} catch(e){}
-return API_KEY_HARDCODED;
+// ═══════════ CLÉ API ═══════════
+function getKey(){
+try{
+const k=(localStorage.getItem(STORAGE_KEY)||'').trim();
+if(k&&k.startsWith('sk-'))return k;
+}catch(e){}
+return API_KEY;
 }
 
-function saveApiKey(){
-const input=document.getElementById('api-key-input');
-const key=input.value.trim();
-if(!key){
-try{localStorage.removeItem(API_KEY_STORAGE);}catch(e){}
-updateApiPanel();
-showToast('Clé supprimée','warn');
-return;
-}
-try{localStorage.setItem(API_KEY_STORAGE,key);}catch(e){}
-updateApiPanel();
-showToast('Clé enregistrée ✓','success');
-input.blur();
-}
-
-function updateApiPanel(){
-const panel=document.getElementById('api-panel');
-const input=document.getElementById('api-key-input');
-const line=document.getElementById('api-status-line');
-const txt=document.getElementById('api-status-text');
-const key=getApiKey();
-if(!panel||!input||!line||!txt)return;
-if(key && key.startsWith('sk-')){
-panel.classList.add('ok');
-line.classList.add('ok');
-txt.textContent='Active · '+key.slice(0,8)+'…'+key.slice(-4);
-input.value=key;
+function refreshApi(){
+const k=getKey();
+const p=$('apiPanel'), s=$('apiStatus'), t=$('apiText'), i=$('apiKey');
+if(!p||!s||!t||!i)return;
+if(k&&k.startsWith('sk-')&&k!=='sk-TACLE'){
+p.classList.add('ok'); s.classList.add('ok');
+t.textContent='Active · '+k.slice(0,8)+'…'+k.slice(-4);
+i.value=k;
 } else {
-panel.classList.remove('ok');
-line.classList.remove('ok');
-txt.textContent='Aucune clé enregistrée';
-input.value='';
+p.classList.remove('ok'); s.classList.remove('ok');
+t.textContent='Aucune clé configurée';
+i.value='';
 }
-updateGenerateBtn();
+refreshGen();
 }
 
-function updateGenerateBtn(){
-const btn=document.getElementById('generate-btn');
-if(!btn)return;
-const hasImg=state.images.length>0;
-const hasKey=!!getApiKey();
-btn.disabled=!hasImg||!hasKey||state.isRunning;
-if(state.isRunning){
-const done=state.completed+state.failed;
-btn.textContent='Génération… ('+done+'/'+state.queue.length+')';
-} else if(!hasKey){btn.textContent='Ajoutez votre clé API';}
-else if(!hasImg){btn.textContent='Ajoutez des images';}
-else {btn.textContent='Générer '+state.images.length+' explication'+(state.images.length>1?'s':'');}
+function saveKey(){
+const i=$('apiKey'); if(!i)return;
+const k=i.value.trim();
+if(!k){localStorage.removeItem(STORAGE_KEY);refreshApi();toast('Clé supprimée','warn');return;}
+try{localStorage.setItem(STORAGE_KEY,k);}catch(e){}
+refreshApi(); toast('Clé enregistrée ✓');
 }
+
+// ═══════════ BOUTON GÉNÉRER ═══════════
+function refreshGen(){
+const b=$('genBtn'); if(!b)return;
+const okKey=getKey()&&getKey()!=='sk-TACLE';
+const okImg=state.images.length>0;
+b.disabled=!okKey||!okImg||state.running;
+if(state.running)b.textContent='Génération… ('+(state.completed+state.failed)+'/'+state.queue.length+')';
+else if(!okKey)b.textContent='Ajoutez votre clé API';
+else if(!okImg)b.textContent='Ajoutez des images';
+else b.textContent='Générer '+state.images.length+' explication'+(state.images.length>1?'s':'');
+}
+
+// ═══════════ IMAGES ═══════════
+function fileToDataUri(file){
+return new Promise((res,rej)=>{
+const r=new FileReader();
+r.onload=e=>res(e.target.result);
+r.onerror=()=>rej(new Error('Erreur lecture'));
+r.readAsDataURL(file);
+});
+}
+
+function makeThumb(dataUri){
+return new Promise(resolve=>{
+const img=new Image();
+img.onload=()=>{
+try{
+const c=document.createElement('canvas');
+const ratio=img.height/img.width;
+c.width=200; c.height=Math.round(200*ratio);
+const ctx=c.getContext('2d');
+ctx.drawImage(img,0,0,c.width,c.height);
+resolve(c.toDataURL('image/jpeg',0.7));
+}catch(e){resolve(dataUri);}
+};
+img.onerror=()=>resolve(dataUri);
+img.src=dataUri;
+});
+}
+
+async function processFile(file){
+if(!file.type.startsWith('image/'))return null;
+if(file.size>12*1024*1024)return null;
+try{
+const d=await fileToDataUri(file);
+const t=await makeThumb(d);
+return {id:Date.now()+Math.random(),dataUri:d,thumbnail:t};
+}catch(e){return null;}
+}
+
+async function handleFiles(files){
+const arr=Array.from(files).filter(f=>f.type.startsWith('image/'));
+if(!arr.length)return;
+setStatus('Chargement…');
+for(let i=0;i<arr.length;i+=5){
+const batch=arr.slice(i,i+5);
+const results=await Promise.allSettled(batch.map(f=>processFile(f)));
+for(const r of results){
+if(r.status==='fulfilled'&&r.value)state.images.push(r.value);
+}
+renderImages();
+}
+setStatus(null);
+refreshGen();
+toast(arr.length+' image'+(arr.length>1?'s':'')+' ajoutée'+(arr.length>1?'s':''));
+}
+
+function renderImages(){
+const g=$('imgGrid'); if(!g)return;
+g.innerHTML=state.images.map(img=>
+'<div class="card"><img src="'+(img.thumbnail||img.dataUri)+'" alt=""><button class="rm" data-id="'+img.id+'">✕</button></div>'
+).join('');
+g.querySelectorAll('.rm').forEach(b=>{
+b.addEventListener('click',e=>{
+e.stopPropagation();
+state.images=state.images.filter(i=>i.id!==parseFloat(b.dataset.id));
+renderImages(); refreshGen();
+});
+});
+}
+
+// ═══════════ DOMAINES ═══════════
+function renderDomains(){
+const g=$('dgrid'); if(!g)return;
+g.innerHTML=DOMAINS.map(d=>
+'<div class="dcard'+(state.domain===d.id?' sel':'')+'" data-id="'+d.id+'">'+
+'<div class="dem">'+d.emoji+'</div>'+
+'<div><div class="dnm">'+esc(d.name)+'</div><div class="dds">'+esc(d.desc)+'</div></div>'+
+'</div>'
+).join('');
+g.querySelectorAll('.dcard').forEach(el=>{
+el.addEventListener('click',()=>{
+state.domain=el.dataset.id;
+renderDomains();
+toast('Domaine : '+DOMAINS.find(d=>d.id===state.domain).name);
+});
+});
+}
+
+// ═══════════ PROMPT ═══════════
+function buildPrompt(){
+const d=DOMAINS.find(x=>x.id===state.domain);
+const parts=[];
+parts.push('Animate this image as a scientific educational visualization. Preserve the exact structure and elements. Add educational motion: particles, flows, energy transfers.');
+if(d)parts.push(d.p);
+if(state.prompt&&state.prompt.trim())parts.push('Scientific phenomenon: '+state.prompt.trim());
+parts.push(PACES[state.pace]);
+parts.push(LEVELS[state.level]);
+parts.push('Clean educational animation. No text overlay. Portrait 9:16, 24fps.');
+return parts.join('. ');
+}
+
+// ═══════════ API ═══════════
+async function apiFetch(url,opts){
+for(let i=0;i<6;i++){
+if(state.stopped)throw new Error('Arrêt');
+try{
+const r=await fetch(url,opts);
+if(r.status===429){await sleep([15,30,45,60,90,120][Math.min(i,5)]*1000);continue;}
+if(r.status===503){await sleep([5,10,15,20,30,45][Math.min(i,5)]*1000);continue;}
+return r;
+}catch(e){
+if(e.message==='Arrêt')throw e;
+await sleep([3,5,8,12,20,30][Math.min(i,5)]*1000);
+}
+}
+return fetch(url,opts);
+}
+
+async function createTask(dataUri,prompt){
+const r=await apiFetch(API_BASE+'/videos',{
+method:'POST',
+headers:{'Authorization':'Bearer '+getKey(),'Content-Type':'application/json'},
+body:JSON.stringify({model:MODEL,prompt:prompt,image:dataUri,num_frames:state.duration,frame_rate:FPS})
+});
+if(!r.ok){const e=await r.text();throw new Error('HTTP '+r.status);}
+const d=await r.json();
+const id=d.video_id||d.id||d.task_id;
+if(!id)throw new Error('Pas d ID');
+return id;
+}
+
+async function pollTask(vid,onProgress){
+let r=30;
+while(r>0){if(state.stopped)throw new Error('Arrêt');onProgress('Préparation… '+r+'s');await sleep(1000);r--;}
+for(let i=0;i<100;i++){
+if(state.stopped)throw new Error('Arrêt');
+if(i>0){let w=8;while(w>0){if(state.stopped)throw new Error('Arrêt');onProgress('En cours… '+w+'s');await sleep(1000);w--;}}
+const url=POLL_BASE+'?video_id='+encodeURIComponent(vid)+'&model_name='+encodeURIComponent(MODEL);
+const res=await apiFetch(url,{method:'GET',headers:{'Authorization':'Bearer '+getKey()}});
+const d=await res.json();
+const s=d.status||'';
+if(s==='completed'||s==='succeeded'||s==='done'){
+const u=(d.metadata&&d.metadata.url)||d.url||(d.output&&d.output.url);
+if(!u)throw new Error('Pas URL');
+return u;
+}
+if(s==='failed'||s==='error')throw new Error('Échec');
+}
+throw new Error('Timeout');
+}
+
+// ═══════════ QUEUE ═══════════
+function renderQueue(){
+const q=$('queue'); if(!q)return;
+if(!state.queue.length){q.innerHTML='';return;}
+const done=state.completed+state.failed;
+let h='<div style="background:#131829;border:1px solid #2a3350;border-radius:10px;padding:0.8rem 1rem;margin-bottom:0.6rem;font-size:0.78rem;display:flex;justify-content:space-between"><span style="color:#4a9eff;font-weight:600">'+done+'/'+state.queue.length+'</span><span style="color:#8892b0">'+(done<state.queue.length?'En cours':'Terminé')+'</span></div>';
+h+=state.queue.slice(0,30).map(it=>{
+let ic='○',st='En attente',cl='pending';
+if(it.status==='creating'){ic='◐';st='Préparation…';cl='pending';}
+else if(it.status==='processing'){ic='◐';st=it.progress||'En cours';cl='processing';}
+else if(it.status==='done'){ic='●';st='Terminé';cl='done';}
+else if(it.status==='failed'){ic='✕';st='Échec';cl='failed';}
+return '<div class="qi '+cl+'"><div class="qic">'+ic+'</div><div class="qnm">Image '+(it.idx+1)+'</div><div class="qst">'+esc(st)+'</div></div>';
+}).join('');
+q.innerHTML=h;
+}
+
+function addToGallery(url,label){
+const g=$('gallery'), gg=$('gg');
+if(!g||!gg)return;
+g.style.display='block';
+const el=document.createElement('div');
+el.className='gi';
+el.innerHTML='<video controls preload="metadata" muted playsinline><source src="'+url+'" type="video/mp4"></video><div class="gc">'+esc(label)+'</div>';
+gg.appendChild(el);
+}
+
+// ═══════════ PIPELINE ═══════════
+async function createAndPoll(item){
+try{
+item.status='creating';item.progress='Préparation…';renderQueue();
+const prompt=buildPrompt();
+item.videoId=await createTask(item.image.dataUri,prompt);
+item.status='processing';item.progress='En cours…';renderQueue();
+const url=await pollTask(item.videoId,p=>{item.progress=p;renderQueue();});
+item.status='done';item.videoUrl=url;
+state.completed++;
+renderQueue(); refreshGen();
+addToGallery(url,'Explication '+(item.idx+1));
+toast('Vidéo '+(item.idx+1)+' prête !');
+}catch(e){
+if(e.message==='Arrêt'){item.status='failed';item.progress='Arrêté';}
+else{item.status='failed';item.progress='Échec';state.failed++;}
+renderQueue(); refreshGen();
+}
+}
+
+// ═══════════ LANCEMENT ═══════════
+async function startGeneration(){
+if(state.running||!state.images.length)return;
+state.prompt=$('prompt').value.trim();
+state.running=true;state.stopped=false;
+state.completed=0;state.failed=0;
+state.queue=state.images.map((img,i)=>({idx:i,image:img,status:'pending',progress:null}));
+$('gg').innerHTML='';
+$('gallery').style.display='none';
+$('stopBtn').classList.add('show');
+refreshGen(); renderQueue();
+const tasks=[];
+try{
+for(let i=0;i<state.queue.length;i++){
+if(state.stopped)break;
+tasks.push(createAndPoll(state.queue[i]));
+if(i<state.queue.length-1&&!state.stopped){
+const w=75;
+for(let r=w;r>0;r--){if(state.stopped)break;setStatus('Respiration… Image '+(i+2)+' dans '+r+'s');await sleep(1000);}
+}
+}
+if(tasks.length)await Promise.allSettled(tasks);
+}catch(e){log('Erreur : '+e.message);}
+setStatus('✦ '+state.completed+'/'+state.queue.length+' vidéos ✦');
+await sleep(3000);
+setStatus(null);
+state.running=false;state.stopped=false;
+$('stopBtn').classList.remove('show');
+refreshGen();
+}
+
+function stopGeneration(){
+if(!state.running)return;
+state.stopped=true;setStatus('Arrêt…');
+}
+
+// ═══════════ INIT ═══════════
+(function init(){
+$('saveKey').addEventListener('click',saveKey);
+$('apiKey').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();saveKey();}});
+$('stopBtn').addEventListener('click',stopGeneration);
+$('genBtn').addEventListener('click',startGeneration);
+document.querySelectorAll('[data-tog]').forEach(h=>{
+h.addEventListener('click',()=>{
+const el=$(h.dataset.tog); if(el)el.classList.toggle('open');
+});
+});
+$('uploadZone').addEventListener('click',()=>$('fileInput').click());
+$('fileInput').addEventListener('change',e=>{handleFiles(e.target.files);e.target.value='';});
+$('prompt').addEventListener('input',e=>{state.prompt=e.target.value;});
+$('selDuration').addEventListener('change',e=>{state.duration=parseInt(e.target.value,10);});
+$('selPace').addEventListener('change',e=>{state.pace=e.target.value;});
+$('selLevel').addEventListener('change',e=>{state.level=e.target.value;});
+refreshApi();
+renderDomains();
+renderImages();
+renderQueue();
+log('Prêt.');
+})();
 </script>
 </body>
-</html> 
+</html>
