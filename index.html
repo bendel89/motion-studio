@@ -821,6 +821,7 @@ function saveApiKey() {
         return;
     }
     localStorage.setItem(API_KEY_STORAGE, key);
+   location.hash = 'key=' + encodeURIComponent(key);
     updateApiPanel();
     showToast('Clé enregistrée ✓', 'success');
     input.blur();
